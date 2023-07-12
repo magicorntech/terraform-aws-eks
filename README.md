@@ -5,7 +5,7 @@ Magicorn made Terraform Module for AWS Provider
 ```
 module "eks" {
   source         = "magicorntech/eks/aws"
-  version        = "0.0.5"
+  version        = "0.0.6"
   tenant         = var.tenant
   name           = var.name
   environment    = var.environment
@@ -20,7 +20,7 @@ module "eks" {
   coredns_version      = "v1.9.3-eksbuild.2"
   kubeproxy_version    = "v1.26.2-eksbuild.1"
   ebscsi_version       = "v1.19.0-eksbuild.1"
-  main_capacity_type   = "SPOT"
+  main_capacity_type   = "ON_DEMAND"
   extra_capacity_type  = "SPOT"
   main_disk_size       = 30
   extra_disk_size      = 30

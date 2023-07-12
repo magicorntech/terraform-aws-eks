@@ -68,8 +68,8 @@ resource "aws_iam_role_policy" "deployer" {
         "s3:PutObject"
       ],
       "Resource": [
-        "arn:aws:s3:::${var.tenant}-${var.name}-*-codepipeline-*-*",
-        "arn:aws:s3:::${var.tenant}-${var.name}-*-codepipeline-*-*/*"
+        "arn:aws:s3:::${var.tenant}-${var.name}-*-cp-*-*",
+        "arn:aws:s3:::${var.tenant}-${var.name}-*-cp-*-*/*"
       ]
     },
     {
