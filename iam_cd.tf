@@ -54,8 +54,8 @@ resource "aws_iam_role_policy" "deployer" {
         "logs:PutLogEvents"
       ],
       "Resource": [
-        "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.tenant}-${var.name}-*-deploy-*",
-        "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.tenant}-${var.name}-*-deploy-*:*"
+        "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.tenant}-*-*-deploy-*",
+        "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.tenant}-*-*-deploy-*:*"
       ]
     },
     {
@@ -68,8 +68,8 @@ resource "aws_iam_role_policy" "deployer" {
         "s3:PutObject"
       ],
       "Resource": [
-        "arn:aws:s3:::${var.tenant}-${var.name}-*-cp-*-*",
-        "arn:aws:s3:::${var.tenant}-${var.name}-*-cp-*-*/*"
+        "arn:aws:s3:::${var.tenant}-*-*-cp-*-*",
+        "arn:aws:s3:::${var.tenant}-*-*-cp-*-*/*"
       ]
     },
     {
@@ -81,8 +81,8 @@ resource "aws_iam_role_policy" "deployer" {
         "codebuild:BatchPutTestCases"
       ],
       "Resource": [
-        "arn:aws:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:report-group:/${var.tenant}-${var.name}-*-build-*-*",
-        "arn:aws:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:report-group:/${var.tenant}-${var.name}-*-deploy-*-*"
+        "arn:aws:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:report-group:/${var.tenant}-*-*-build-*-*",
+        "arn:aws:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:report-group:/${var.tenant}-*-*-deploy-*-*"
       ]
     },
     {
