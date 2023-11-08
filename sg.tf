@@ -11,6 +11,16 @@ resource "aws_security_group" "main" {
     cidr_blocks = [var.cidr_block]
   }
 
+  dynamic "ingress" {
+    for_each = (var.additional_ips != null) ? [true] : []
+    content {
+      protocol    = "tcp"
+      from_port   = 443
+      to_port     = 443
+      cidr_blocks = var.additional_ips
+    }
+  }
+
   egress {
     from_port   = 0
     to_port     = 0

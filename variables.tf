@@ -5,6 +5,7 @@ variable "vpc_id" {}
 variable "cidr_block" {}
 variable "pvt_subnet_ids" {}
 variable "eks_subnet_ids" {}
+variable "additional_ips" {}
 variable "eks_version" {}
 variable "vpccni_version" {}
 variable "coredns_version" {}
