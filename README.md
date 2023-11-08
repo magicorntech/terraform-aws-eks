@@ -5,7 +5,7 @@ Magicorn made Terraform Module for AWS Provider
 ```
 module "eks" {
   source         = "magicorntech/eks/aws"
-  version        = "0.0.6"
+  version        = "0.0.7"
   tenant         = var.tenant
   name           = var.name
   environment    = var.environment
@@ -13,6 +13,7 @@ module "eks" {
   cidr_block     = module.vpc.cidr_block
   pvt_subnet_ids = module.vpc.pvt_subnet_ids
   eks_subnet_ids = module.vpc.eks_subnet_ids
+  additional_ips = ["10.10.0.0/16", "172.31.0.0/16"] # should be set empty []
 
   # EKS Configuration
   eks_version          = "1.26"
