@@ -20,3 +20,4 @@ variable "extra_instance_types" {}
 variable "main_scaling_config" {}
 variable "extra_scaling_config" {}
 variable "enable_aws_cicd" {}
+variable "fargate_profile" {}

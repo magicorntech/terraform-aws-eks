@@ -5,7 +5,7 @@ Magicorn made Terraform Module for AWS Provider
 ```
 module "eks" {
   source         = "magicorntech/eks/aws"
-  version        = "0.0.7"
+  version        = "0.0.8"
   tenant         = var.tenant
   name           = var.name
   environment    = var.environment
@@ -16,11 +16,11 @@ module "eks" {
   additional_ips = ["10.10.0.0/16", "172.31.0.0/16"] # should be set empty []
 
   # EKS Configuration
-  eks_version          = "1.26"
-  vpccni_version       = "v1.12.5-eksbuild.2"
-  coredns_version      = "v1.9.3-eksbuild.2"
-  kubeproxy_version    = "v1.26.2-eksbuild.1"
-  ebscsi_version       = "v1.19.0-eksbuild.1"
+  eks_version          = "1.27"
+  vpccni_version       = "v1.12.6-eksbuild.2"
+  coredns_version      = "v1.10.1-eksbuild.1"
+  kubeproxy_version    = "v1.27.1-eksbuild.1"
+  ebscsi_version       = "v1.24.0-eksbuild.1"
   main_capacity_type   = "ON_DEMAND"
   extra_capacity_type  = "SPOT"
   main_disk_size       = 30
@@ -30,6 +30,7 @@ module "eks" {
   main_scaling_config  = {desired=3, min=3, max=3}
   extra_scaling_config = {desired=0, min=0, max=25}
   enable_aws_cicd      = true # 1
+  fargate_profile      = false
 }
 ```
 
