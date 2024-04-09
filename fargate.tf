@@ -31,6 +31,30 @@ resource "aws_iam_role_policy_attachment" "fargate" {
   role       = aws_iam_role.fargate[0].id
 }
 
+# Create Logging Policy for Fargate
+resource "aws_iam_role_policy" "fargate" {
+  count = (var.fargate_profile == true) ? 1 : 0
+  name = "${var.tenant}-${var.name}-fargate-logging-policy-${var.environment}"
+  role = aws_iam_role.fargate[0].id
+
+  policy = <<EOF
+{
+	"Version": "2012-10-17",
+	"Statement": [{
+		"Effect": "Allow",
+		"Action": [
+			"logs:CreateLogStream",
+			"logs:CreateLogGroup",
+			"logs:DescribeLogStreams",
+			"logs:PutLogEvents",
+      "logs:PutRetentionPolicy"
+		],
+		"Resource": "*"
+	}]
+}
+EOF
+}
+
 # Create Fargate Profile
 resource "aws_eks_fargate_profile" "main" {
   count                  = (var.fargate_profile == true) ? 1 : 0
