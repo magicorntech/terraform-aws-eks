@@ -18,6 +18,10 @@ resource "aws_eks_cluster" "main" {
     aws_iam_role_policy_attachment.AmazonEKSVPCResourceController,
   ]
 
+  lifecycle {
+    prevent_destroy = true
+  }
+
   tags = {
     Name        = "${var.tenant}-${var.name}-eks-cluster-${var.environment}"
     Tenant      = var.tenant
