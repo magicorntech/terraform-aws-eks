@@ -16,11 +16,11 @@ module "eks" {
   additional_ips = ["10.10.0.0/16", "172.31.0.0/16"] # should be set empty []
 
   # EKS Configuration
-  eks_version          = "1.27"
-  vpccni_version       = "v1.12.6-eksbuild.2"
-  coredns_version      = "v1.10.1-eksbuild.1"
-  kubeproxy_version    = "v1.27.1-eksbuild.1"
-  ebscsi_version       = "v1.24.0-eksbuild.1"
+  eks_version          = "1.30"
+  vpccni_version       = "v1.19.0-eksbuild.1"
+  coredns_version      = "v1.11.1-eksbuild.8"
+  kubeproxy_version    = "v1.30.6-eksbuild.3"
+  ebscsi_version       = "v1.38.1-eksbuild.1"
   main_capacity_type   = "ON_DEMAND"
   extra_capacity_type  = "SPOT"
   main_disk_size       = 30
