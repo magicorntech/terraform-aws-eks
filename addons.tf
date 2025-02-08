@@ -18,6 +18,11 @@ resource "aws_eks_addon" "vpccni" {
 #     }
 #   })
 
+  depends_on = [
+    aws_eks_node_group.main,
+    aws_eks_node_group.extra
+  ]
+
   tags = {
     Name        = "${var.tenant}-${var.name}-eks-addon-vpc-cni-${data.aws_region.current.name}-${var.environment}"
     Tenant      = var.tenant
@@ -47,6 +52,11 @@ resource "aws_eks_addon" "coredns" {
 #       }
 #     }
 #   })
+
+  depends_on = [
+    aws_eks_node_group.main,
+    aws_eks_node_group.extra
+  ]
 
   tags = {
     Name        = "${var.tenant}-${var.name}-eks-addon-coredns-${data.aws_region.current.name}-${var.environment}"
@@ -78,6 +88,11 @@ resource "aws_eks_addon" "kubeproxy" {
 #     }
 #   })
 
+  depends_on = [
+    aws_eks_node_group.main,
+    aws_eks_node_group.extra
+  ]
+
   tags = {
     Name        = "${var.tenant}-${var.name}-eks-addon-kube-proxy-${data.aws_region.current.name}-${var.environment}"
     Tenant      = var.tenant
@@ -107,6 +122,11 @@ resource "aws_eks_addon" "ebscsi" {
 #       }
 #     }
 #   })
+
+  depends_on = [
+    aws_eks_node_group.main,
+    aws_eks_node_group.extra
+  ]
 
   tags = {
     Name        = "${var.tenant}-${var.name}-eks-addon-ebs-csi-${data.aws_region.current.name}-${var.environment}"

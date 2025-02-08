@@ -158,7 +158,7 @@ spec:
         fsGroup: 65534
       serviceAccountName: cluster-autoscaler
       containers:
-        - image: k8s.gcr.io/autoscaling/cluster-autoscaler:v${aws_eks_cluster.main.version}.2
+        - image: registry.k8s.io/autoscaling/cluster-autoscaler:v${aws_eks_cluster.main.version}.X <-- fill this X
           name: cluster-autoscaler
           resources:
             limits:
