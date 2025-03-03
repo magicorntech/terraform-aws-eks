@@ -5,7 +5,7 @@ Magicorn made Terraform Module for AWS Provider
 ```
 module "eks" {
   source         = "magicorntech/eks/aws"
-  version        = "0.1.0"
+  version        = "0.2.0"
   tenant         = var.tenant
   name           = var.name
   environment    = var.environment
@@ -21,16 +21,26 @@ module "eks" {
   coredns_version      = "v1.11.1-eksbuild.8"
   kubeproxy_version    = "v1.30.6-eksbuild.3"
   ebscsi_version       = "v1.38.1-eksbuild.1"
-  main_capacity_type   = "ON_DEMAND"
-  extra_capacity_type  = "SPOT"
-  main_disk_size       = 30
-  extra_disk_size      = 30
-  main_instance_types  = ["t3.medium", "t3a.medium"]
-  extra_instance_types = ["t3.medium", "t3a.medium"]
-  main_scaling_config  = {desired=3, min=3, max=3}
-  extra_scaling_config = {desired=0, min=0, max=25}
   enable_aws_cicd      = true # 1
   fargate_profile      = false
+
+  # Node Configuration
+  main_capacity_type   = "ON_DEMAND"
+  main_disk_size       = 30
+  main_instance_types  = ["t3.medium", "t3a.medium"]
+  main_scaling_config  = {desired=3, min=3, max=3}
+
+  extra_nodes_deploy   = true
+  extra_capacity_type  = "SPOT"
+  extra_disk_size      = 30
+  extra_instance_types = ["t3.medium", "t3a.medium"]
+  extra_scaling_config = {desired=0, min=0, max=25}
+
+  tmp_nodes_deploy   = false
+  tmp_capacity_type  = "SPOT"
+  tmp_disk_size      = 30
+  tmp_instance_types = ["t3.large", "t3a.large"]
+  tmp_scaling_config = {desired=0, min=0, max=25}
 }
 ```
 
