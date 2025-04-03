@@ -5,6 +5,7 @@ resource "aws_eks_node_group" "main" {
   node_role_arn   = aws_iam_role.node.arn
   subnet_ids      = var.eks_subnet_ids
   capacity_type   = var.main_capacity_type
+  ami_type        = var.main_ami_type
   instance_types  = var.main_instance_types
   version         = var.eks_version
 
@@ -53,6 +54,7 @@ resource "aws_eks_node_group" "extra" {
   node_role_arn   = aws_iam_role.node.arn
   subnet_ids      = var.eks_subnet_ids
   capacity_type   = var.extra_capacity_type
+  ami_type        = var.extra_ami_type
   instance_types  = var.extra_instance_types
   version         = var.eks_version
 
@@ -100,6 +102,7 @@ resource "aws_eks_node_group" "tmp" {
   node_role_arn   = aws_iam_role.node.arn
   subnet_ids      = var.eks_subnet_ids
   capacity_type   = var.tmp_capacity_type
+  ami_type        = var.tmp_ami_type
   instance_types  = var.tmp_instance_types
   version         = var.eks_version
 
