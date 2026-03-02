@@ -154,6 +154,7 @@ resource "aws_iam_role_policy" "alb_controller_policy" {
               "elasticloadbalancing:DescribeRules",
               "elasticloadbalancing:DescribeTargetGroups",
               "elasticloadbalancing:DescribeTargetGroupAttributes",
+              "elasticloadbalancing:SetRulePriorities",
               "elasticloadbalancing:DescribeTargetHealth",
               "elasticloadbalancing:DescribeTags"
           ],
@@ -259,7 +260,8 @@ resource "aws_iam_role_policy" "alb_controller_policy" {
               "elasticloadbalancing:CreateListener",
               "elasticloadbalancing:DeleteListener",
               "elasticloadbalancing:CreateRule",
-              "elasticloadbalancing:DeleteRule"
+              "elasticloadbalancing:DeleteRule",
+              "elasticloadbalancing:SetRulePriorities"
           ],
           "Resource": "*"
       },
@@ -326,6 +328,7 @@ resource "aws_iam_role_policy" "alb_controller_policy" {
               "elasticloadbalancing:DeleteLoadBalancer",
               "elasticloadbalancing:ModifyTargetGroup",
               "elasticloadbalancing:ModifyTargetGroupAttributes",
+              "elasticloadbalancing:SetRulePriorities",
               "elasticloadbalancing:DeleteTargetGroup"
           ],
           "Resource": "*",
@@ -350,7 +353,8 @@ resource "aws_iam_role_policy" "alb_controller_policy" {
               "elasticloadbalancing:ModifyListener",
               "elasticloadbalancing:AddListenerCertificates",
               "elasticloadbalancing:RemoveListenerCertificates",
-              "elasticloadbalancing:ModifyRule"
+              "elasticloadbalancing:ModifyRule",
+              "elasticloadbalancing:SetRulePriorities"
           ],
           "Resource": "*"
       }

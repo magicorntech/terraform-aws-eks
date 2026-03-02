@@ -5,7 +5,7 @@ Magicorn made Terraform Module for AWS Provider
 ```
 module "eks" {
   source         = "magicorntech/eks/aws"
-  version        = "0.3.1"
+  version        = "0.3.2"
   tenant         = var.tenant
   name           = var.name
   environment    = var.environment
