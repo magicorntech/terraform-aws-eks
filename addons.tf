@@ -1,8 +1,9 @@
 resource "aws_eks_addon" "vpccni" {
-  cluster_name      = aws_eks_cluster.main.name
-  addon_name        = "vpc-cni"
-  addon_version     = var.vpccni_version
-  resolve_conflicts = "OVERWRITE"
+  cluster_name                = aws_eks_cluster.main.name
+  addon_name                  = "vpc-cni"
+  addon_version               = var.vpccni_version
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
 
 #   configuration_values = jsonencode({
 #     replicaCount = 4
@@ -34,10 +35,11 @@ resource "aws_eks_addon" "vpccni" {
 }
 
 resource "aws_eks_addon" "coredns" {
-  cluster_name      = aws_eks_cluster.main.name
-  addon_name        = "coredns"
-  addon_version     = var.coredns_version
-  resolve_conflicts = "OVERWRITE"
+  cluster_name                = aws_eks_cluster.main.name
+  addon_name                  = "coredns"
+  addon_version               = var.coredns_version
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
 
 #   configuration_values = jsonencode({
 #     replicaCount = 4
@@ -69,10 +71,11 @@ resource "aws_eks_addon" "coredns" {
 }
 
 resource "aws_eks_addon" "kubeproxy" {
-  cluster_name      = aws_eks_cluster.main.name
-  addon_name        = "kube-proxy"
-  addon_version     = var.kubeproxy_version
-  resolve_conflicts = "OVERWRITE"
+  cluster_name                = aws_eks_cluster.main.name
+  addon_name                  = "kube-proxy"
+  addon_version               = var.kubeproxy_version
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
 
 #   configuration_values = jsonencode({
 #     replicaCount = 4
@@ -104,10 +107,11 @@ resource "aws_eks_addon" "kubeproxy" {
 }
 
 resource "aws_eks_addon" "ebscsi" {
-  cluster_name      = aws_eks_cluster.main.name
-  addon_name        = "aws-ebs-csi-driver"
-  addon_version     = var.ebscsi_version
-  resolve_conflicts = "OVERWRITE"
+  cluster_name                = aws_eks_cluster.main.name
+  addon_name                  = "aws-ebs-csi-driver"
+  addon_version               = var.ebscsi_version
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
 
 #   configuration_values = jsonencode({
 #     replicaCount = 4
