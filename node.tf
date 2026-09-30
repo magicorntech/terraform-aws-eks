@@ -142,3 +142,57 @@ resource "aws_eks_node_group" "tmp" {
   }
 }
 
+
+##### Create GPU Node Group
+resource "aws_eks_node_group" "gpu" {
+  count           = (var.gpu_nodes_deploy == true) ? 1 : 0
+  cluster_name    = aws_eks_cluster.main.name
+  node_group_name = "${var.tenant}-${var.name}-eks-gpunode-${var.environment}"
+  node_role_arn   = aws_iam_role.node.arn
+  subnet_ids      = var.eks_subnet_ids
+  capacity_type   = var.gpu_capacity_type
+  ami_type        = var.gpu_ami_type
+  instance_types  = var.gpu_instance_types
+  version         = var.eks_version
+
+  launch_template {
+    id      = aws_launch_template.gpu[0].id
+    version = "$Latest"
+  }
+
+  scaling_config {
+    desired_size = lookup(var.gpu_scaling_config, "desired")
+    min_size     = lookup(var.gpu_scaling_config, "min")
+    max_size     = lookup(var.gpu_scaling_config, "max")
+  }
+
+  taint {
+    key    = "nvidia.com/gpu"
+    value  = "true"
+    effect = "NO_SCHEDULE"
+  }
+
+  # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
+  # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
+  depends_on = [
+    aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
+    aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy,
+    aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
+  ]
+
+  lifecycle {
+    ignore_changes = [
+      scaling_config[0].desired_size,
+      launch_template[0].version
+    ]
+  }
+
+  tags = {
+    Name        = "${var.tenant}-${var.name}-eks-gpunode-${var.environment}"
+    Tenant      = var.tenant
+    Project     = var.name
+    Environment = var.environment
+    Maintainer  = "Magicorn"
+    Terraform   = "yes"
+  }
+}

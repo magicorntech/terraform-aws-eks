@@ -30,3 +30,9 @@ variable "tmp_ami_type" {}
 variable "tmp_disk_size" {}
 variable "tmp_instance_types" {}
 variable "tmp_scaling_config" {}
+variable "gpu_nodes_deploy" {}
+variable "gpu_capacity_type" {}
+variable "gpu_ami_type" {}
+variable "gpu_disk_size" {}
+variable "gpu_instance_types" {}
+variable "gpu_scaling_config" {}

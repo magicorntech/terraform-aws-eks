@@ -146,3 +146,51 @@ resource "aws_launch_template" "tmp" {
     Terraform   = "yes"
   }
 }
+
+##### Create GPU Launch Template
+resource "aws_launch_template" "gpu" {
+  count = (var.gpu_nodes_deploy == true) ? 1 : 0
+  name  = "${var.tenant}-${var.name}-eks-gpult-${var.environment}"
+
+  block_device_mappings {
+    device_name = "/dev/xvda"
+
+    ebs {
+      volume_size = var.gpu_disk_size
+    }
+  }
+
+  # credit_specification is intentionally omitted: GPU instances (g/p families) are not burstable
+
+  ebs_optimized = true
+
+  metadata_options {
+    http_endpoint               = "enabled"
+    http_tokens                 = "optional"
+    instance_metadata_tags      = "enabled"
+    http_protocol_ipv6          = "disabled"
+    http_put_response_hop_limit = 2
+  }
+
+  tag_specifications {
+    resource_type = "instance"
+
+    tags = {
+      Name        = "${var.tenant}-${var.name}-eks-gpunode-${var.environment}"
+      Tenant      = var.tenant
+      Project     = var.name
+      Environment = var.environment
+      Maintainer  = "Magicorn"
+      Terraform   = "yes"
+    }
+  }
+
+  tags = {
+    Name        = "${var.tenant}-${var.name}-eks-gpult-${var.environment}"
+    Tenant      = var.tenant
+    Project     = var.name
+    Environment = var.environment
+    Maintainer  = "Magicorn"
+    Terraform   = "yes"
+  }
+}

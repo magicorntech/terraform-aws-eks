@@ -5,7 +5,7 @@ Magicorn made Terraform Module for AWS Provider
 ```
 module "eks" {
   source         = "magicorntech/eks/aws"
-  version        = "0.3.3"
+  version        = "0.4.0"
   tenant         = var.tenant
   name           = var.name
   environment    = var.environment
@@ -44,8 +44,16 @@ module "eks" {
   tmp_disk_size      = 30
   tmp_instance_types = ["t4g.large"]
   tmp_scaling_config = {desired=0, min=0, max=25}
+
+  gpu_nodes_deploy   = false
+  gpu_capacity_type  = "ON_DEMAND"
+  gpu_ami_type       = "AL2023_x86_64_NVIDIA"
+  gpu_disk_size      = 100
+  gpu_instance_types = ["g4dn.xlarge"]
+  gpu_scaling_config = {desired=1, min=1, max=1}
 }
 ```
 
 ## Notes
 1) Disable if you want to use external CI/CD solutions like GitLab or Bitbucket. Leaving true deploys the required permissions for AWS Code Suite.
+2) The GPU node group is tainted with `nvidia.com/gpu=true:NoSchedule`, so only pods tolerating it are scheduled there. Use an NVIDIA AMI type (e.g. `AL2023_x86_64_NVIDIA`) and a GPU instance type (g/p families).
