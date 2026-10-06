@@ -5,7 +5,7 @@ Magicorn made Terraform Module for AWS Provider
 ```
 module "eks" {
   source         = "magicorntech/eks/aws"
-  version        = "0.5.0"
+  version        = "0.5.1"
   tenant         = var.tenant
   name           = var.name
   environment    = var.environment
@@ -69,4 +69,4 @@ module "eks" {
 ## Notes
 1) Disable if you want to use external CI/CD solutions like GitLab or Bitbucket. Leaving true deploys the required permissions for AWS Code Suite.
 2) The GPU node group is tainted with `nvidia.com/gpu=true:NoSchedule`, so only pods tolerating it are scheduled there. Use an NVIDIA AMI type (e.g. `AL2023_x86_64_NVIDIA`) and a GPU instance type (g/p families).
-3) Works better with magicorn-aws-kms module. Set `efs_drives = {}` to skip EFS, the CSI add-on, and StorageClass files. Each map key becomes one file system plus `_deployables/5_efs_<key>_storageclass.yaml` (`storageClassName: efs-<key>`). Use DNS-safe keys (`shared`, `mlflow`).
+3) Works better with magicorn-aws-kms module. Set `efs_drives = {}` to skip EFS, the CSI add-on, and StorageClass files. Each map key becomes one file system and one StorageClass (`efs-<key>`) in `_deployables/5_efs_storageclass.yaml`. Use DNS-safe keys (`shared`, `mlflow`).

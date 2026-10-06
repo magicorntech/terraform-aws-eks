@@ -276,18 +276,20 @@ EOF
 }
 
 resource "local_file" "efs_storageclass" {
-  for_each = aws_efs_file_system.main
-  filename = "${path.root}/_deployables/5_efs_${each.key}_storageclass.yaml"
+  count    = length(var.efs_drives) > 0 ? 1 : 0
+  filename = "${path.root}/_deployables/5_efs_storageclass.yaml"
   content  = <<EOF
+%{for name, fs in aws_efs_file_system.main~}
 ---
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: efs-${each.key}
+  name: efs-${name}
 provisioner: efs.csi.aws.com
 parameters:
   provisioningMode: efs-ap
-  fileSystemId: ${each.value.id}
+  fileSystemId: ${fs.id}
   directoryPerms: "700"
+%{endfor~}
 EOF
 }
