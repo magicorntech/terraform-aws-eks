@@ -274,3 +274,20 @@ spec:
   revisionHistoryLimit: 3
 EOF
 }
+
+resource "local_file" "efs_storageclass" {
+  for_each = aws_efs_file_system.main
+  filename = "${path.root}/_deployables/5_efs_${each.key}_storageclass.yaml"
+  content  = <<EOF
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: efs-${each.key}
+provisioner: efs.csi.aws.com
+parameters:
+  provisioningMode: efs-ap
+  fileSystemId: ${each.value.id}
+  directoryPerms: "700"
+EOF
+}

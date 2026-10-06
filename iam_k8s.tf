@@ -73,6 +73,48 @@ resource "aws_iam_role_policy" "cluster_autoscaler_policy" {
 EOF
 }
 
+# Create Kubernetes Role for Amazon EFS CSI Driver
+resource "aws_iam_role" "efs_csi" {
+  count = length(var.efs_drives) > 0 ? 1 : 0
+  name  = "${var.tenant}-${var.name}-eks-efs-csi-role-${random_id.iam.hex}-${var.environment}"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${aws_iam_openid_connect_provider.main.url}"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringLike": {
+          "${aws_iam_openid_connect_provider.main.url}:aud": "sts.amazonaws.com",
+          "${aws_iam_openid_connect_provider.main.url}:sub": "system:serviceaccount:kube-system:efs-csi-*"
+        }
+      }
+    }
+  ]
+}
+EOF
+
+  tags = {
+    Name        = "${var.tenant}-${var.name}-eks-efs-csi-role-${random_id.iam.hex}-${var.environment}"
+    Tenant      = var.tenant
+    Project     = var.name
+    Environment = var.environment
+    Maintainer  = "Magicorn"
+    Terraform   = "yes"
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "AmazonEFSCSIDriverPolicy" {
+  count      = length(var.efs_drives) > 0 ? 1 : 0
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy"
+  role       = aws_iam_role.efs_csi[0].name
+}
+
 # Create Kubernetes Role for AWS Load Balancer Controller
 resource "aws_iam_role" "alb_controller" {
   name = "${var.tenant}-${var.name}-eks-load-balancer-role-${random_id.iam.hex}-${var.environment}"

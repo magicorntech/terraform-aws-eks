@@ -21,6 +21,7 @@ module "eks" {
   coredns_version      = "v1.11.1-eksbuild.8"
   kubeproxy_version    = "v1.30.6-eksbuild.3"
   ebscsi_version       = "v1.38.1-eksbuild.1"
+  efscsi_version       = "v2.1.8-eksbuild.1"
   enable_aws_cicd      = true # 1
   fargate_profile      = false
 
@@ -51,9 +52,21 @@ module "eks" {
   gpu_disk_size      = 100
   gpu_instance_types = ["g4dn.xlarge"]
   gpu_scaling_config = {desired=1, min=1, max=1}
+
+  # Additional EFS Configuration (you may set empty map {})
+  efs_drives = {
+    shared = {
+      encryption                      = true
+      kms_key_id                      = null # 3
+      performance_mode                = "generalPurpose" # or "maxIO"
+      throughput_mode                 = "bursting"       # "provisioned" or "elastic"
+      provisioned_throughput_in_mibps = null             # set only if "provisioned" throughput_mode
+    }
+  }
 }
 ```
 
 ## Notes
 1) Disable if you want to use external CI/CD solutions like GitLab or Bitbucket. Leaving true deploys the required permissions for AWS Code Suite.
 2) The GPU node group is tainted with `nvidia.com/gpu=true:NoSchedule`, so only pods tolerating it are scheduled there. Use an NVIDIA AMI type (e.g. `AL2023_x86_64_NVIDIA`) and a GPU instance type (g/p families).
+3) Works better with magicorn-aws-kms module. Set `efs_drives = {}` to skip EFS, the CSI add-on, and StorageClass files. Each map key becomes one file system plus `_deployables/5_efs_<key>_storageclass.yaml` (`storageClassName: efs-<key>`). Use DNS-safe keys (`shared`, `mlflow`).

@@ -11,6 +11,8 @@ variable "vpccni_version" {}
 variable "coredns_version" {}
 variable "kubeproxy_version" {}
 variable "ebscsi_version" {}
+variable "efscsi_version" {}
+variable "efs_drives" {}
 variable "enable_aws_cicd" {}
 variable "fargate_profile" {}
 variable "main_capacity_type" {}
