@@ -5,7 +5,7 @@ Magicorn made Terraform Module for AWS Provider
 ```
 module "eks" {
   source         = "magicorntech/eks/aws"
-  version        = "0.5.1"
+  version        = "0.6.0"
   tenant         = var.tenant
   name           = var.name
   environment    = var.environment
@@ -25,33 +25,44 @@ module "eks" {
   enable_aws_cicd      = true # 1
   fargate_profile      = false
 
-  # Node Configuration
-  main_capacity_type   = "ON_DEMAND"
-  main_ami_type        = "AL2023_x86_64_STANDARD"
-  main_disk_size       = 30
-  main_instance_types  = ["t3.medium", "t3a.medium"]
-  main_scaling_config  = {desired=3, min=3, max=3}
-
-  extra_nodes_deploy   = true
-  extra_capacity_type  = "SPOT"
-  extra_ami_type       = "AL2023_x86_64_STANDARD"
-  extra_disk_size      = 30
-  extra_instance_types = ["t3.medium", "t3a.medium"]
-  extra_scaling_config = {desired=0, min=0, max=25}
-
-  tmp_nodes_deploy   = false
-  tmp_capacity_type  = "SPOT"
-  tmp_ami_type       = "AL2023_ARM_64_STANDARD"
-  tmp_disk_size      = 30
-  tmp_instance_types = ["t4g.large"]
-  tmp_scaling_config = {desired=0, min=0, max=25}
-
-  gpu_nodes_deploy   = false
-  gpu_capacity_type  = "ON_DEMAND"
-  gpu_ami_type       = "AL2023_x86_64_NVIDIA"
-  gpu_disk_size      = 100
-  gpu_instance_types = ["g4dn.xlarge"]
-  gpu_scaling_config = {desired=1, min=1, max=1}
+  # Node Configuration (you may set empty map {})
+  node_groups = {
+    main = {
+      capacity_type  = "ON_DEMAND"
+      ami_type       = "AL2023_x86_64_STANDARD"
+      disk_size      = 30
+      instance_types = ["t3.medium", "t3a.medium"]
+      scaling_config = { desired = 3, min = 3, max = 3 }
+      hop_limit      = 3
+    }
+    extra = {
+      capacity_type  = "SPOT"
+      ami_type       = "AL2023_x86_64_STANDARD"
+      disk_size      = 30
+      instance_types = ["t3.medium", "t3a.medium"]
+      scaling_config = { desired = 0, min = 0, max = 25 }
+      iam_role       = "arn:aws:iam::123456789012:role/custom-node" # 2
+    }
+    tmp = {
+      capacity_type  = "SPOT"
+      ami_type       = "AL2023_ARM_64_STANDARD"
+      disk_size      = 30
+      instance_types = ["t4g.large"]
+      scaling_config = { desired = 0, min = 0, max = 25 }
+    }
+    gpu = {
+      capacity_type  = "ON_DEMAND"
+      ami_type       = "AL2023_x86_64_NVIDIA"
+      disk_size      = 100
+      instance_types = ["g4dn.xlarge"]
+      scaling_config = { desired = 1, min = 1, max = 1 }
+      taints = [{
+        key    = "nvidia.com/gpu"
+        value  = "true"
+        effect = "NO_SCHEDULE"
+      }]
+    }
+  }
 
   # Additional EFS Configuration (you may set empty map {})
   efs_drives = {
@@ -68,5 +79,5 @@ module "eks" {
 
 ## Notes
 1) Disable if you want to use external CI/CD solutions like GitLab or Bitbucket. Leaving true deploys the required permissions for AWS Code Suite.
-2) The GPU node group is tainted with `nvidia.com/gpu=true:NoSchedule`, so only pods tolerating it are scheduled there. Use an NVIDIA AMI type (e.g. `AL2023_x86_64_NVIDIA`) and a GPU instance type (g/p families).
+2) Each `node_groups` map key becomes one launch template and one node group (`eks-<key>lt` / `eks-<key>node`). Omit a key to skip that group. Optional `taints` list applies EKS taints (e.g. GPU `nvidia.com/gpu=true:NoSchedule`). NVIDIA AMI types skip burstable `credit_specification`. Optional `iam_role`: omit to use the module node role, set an ARN to use that role, set `""` or `null` for no role. Optional `hop_limit` sets IMDS `http_put_response_hop_limit` (defaults to `2` if omitted). Use DNS-safe keys (`main`, `extra`, `gpu`, `ml`).
 3) Works better with magicorn-aws-kms module. Set `efs_drives = {}` to skip EFS, the CSI add-on, and StorageClass files. Each map key becomes one file system and one StorageClass (`efs-<key>`) in `_deployables/5_efs_storageclass.yaml`. Use DNS-safe keys (`shared`, `mlflow`).

@@ -5,23 +5,22 @@ resource "aws_eks_addon" "vpccni" {
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
 
-#   configuration_values = jsonencode({
-#     replicaCount = 4
-#     resources = {
-#       limits = {
-#         cpu    = "100m"
-#         memory = "150Mi"
-#       }
-#       requests = {
-#         cpu    = "100m"
-#         memory = "150Mi"
-#       }
-#     }
-#   })
+  #   configuration_values = jsonencode({
+  #     replicaCount = 4
+  #     resources = {
+  #       limits = {
+  #         cpu    = "100m"
+  #         memory = "150Mi"
+  #       }
+  #       requests = {
+  #         cpu    = "100m"
+  #         memory = "150Mi"
+  #       }
+  #     }
+  #   })
 
   depends_on = [
-    aws_eks_node_group.main,
-    aws_eks_node_group.extra
+    aws_eks_node_group.main
   ]
 
   tags = {
@@ -41,23 +40,22 @@ resource "aws_eks_addon" "coredns" {
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
 
-#   configuration_values = jsonencode({
-#     replicaCount = 4
-#     resources = {
-#       limits = {
-#         cpu    = "100m"
-#         memory = "150Mi"
-#       }
-#       requests = {
-#         cpu    = "100m"
-#         memory = "150Mi"
-#       }
-#     }
-#   })
+  #   configuration_values = jsonencode({
+  #     replicaCount = 4
+  #     resources = {
+  #       limits = {
+  #         cpu    = "100m"
+  #         memory = "150Mi"
+  #       }
+  #       requests = {
+  #         cpu    = "100m"
+  #         memory = "150Mi"
+  #       }
+  #     }
+  #   })
 
   depends_on = [
-    aws_eks_node_group.main,
-    aws_eks_node_group.extra
+    aws_eks_node_group.main
   ]
 
   tags = {
@@ -77,23 +75,22 @@ resource "aws_eks_addon" "kubeproxy" {
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
 
-#   configuration_values = jsonencode({
-#     replicaCount = 4
-#     resources = {
-#       limits = {
-#         cpu    = "100m"
-#         memory = "150Mi"
-#       }
-#       requests = {
-#         cpu    = "100m"
-#         memory = "150Mi"
-#       }
-#     }
-#   })
+  #   configuration_values = jsonencode({
+  #     replicaCount = 4
+  #     resources = {
+  #       limits = {
+  #         cpu    = "100m"
+  #         memory = "150Mi"
+  #       }
+  #       requests = {
+  #         cpu    = "100m"
+  #         memory = "150Mi"
+  #       }
+  #     }
+  #   })
 
   depends_on = [
-    aws_eks_node_group.main,
-    aws_eks_node_group.extra
+    aws_eks_node_group.main
   ]
 
   tags = {
@@ -113,23 +110,22 @@ resource "aws_eks_addon" "ebscsi" {
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
 
-#   configuration_values = jsonencode({
-#     replicaCount = 4
-#     resources = {
-#       limits = {
-#         cpu    = "100m"
-#         memory = "150Mi"
-#       }
-#       requests = {
-#         cpu    = "100m"
-#         memory = "150Mi"
-#       }
-#     }
-#   })
+  #   configuration_values = jsonencode({
+  #     replicaCount = 4
+  #     resources = {
+  #       limits = {
+  #         cpu    = "100m"
+  #         memory = "150Mi"
+  #       }
+  #       requests = {
+  #         cpu    = "100m"
+  #         memory = "150Mi"
+  #       }
+  #     }
+  #   })
 
   depends_on = [
-    aws_eks_node_group.main,
-    aws_eks_node_group.extra
+    aws_eks_node_group.main
   ]
 
   tags = {
@@ -153,7 +149,6 @@ resource "aws_eks_addon" "efscsi" {
 
   depends_on = [
     aws_eks_node_group.main,
-    aws_eks_node_group.extra,
     aws_iam_role_policy_attachment.AmazonEFSCSIDriverPolicy
   ]
 
