@@ -5,7 +5,7 @@ Magicorn made Terraform Module for AWS Provider
 ```
 module "eks" {
   source         = "magicorntech/eks/aws"
-  version        = "0.6.0"
+  version        = "0.6.1"
   tenant         = var.tenant
   name           = var.name
   environment    = var.environment
@@ -79,5 +79,5 @@ module "eks" {
 
 ## Notes
 1) Disable if you want to use external CI/CD solutions like GitLab or Bitbucket. Leaving true deploys the required permissions for AWS Code Suite.
-2) Each `node_groups` map key becomes one launch template and one node group (`eks-<key>lt` / `eks-<key>node`). Omit a key to skip that group. Optional `taints` list applies EKS taints (e.g. GPU `nvidia.com/gpu=true:NoSchedule`). NVIDIA AMI types skip burstable `credit_specification`. Optional `iam_role`: omit to use the module node role, set an ARN to use that role, set `""` or `null` for no role. Optional `hop_limit` sets IMDS `http_put_response_hop_limit` (defaults to `2` if omitted). Use DNS-safe keys (`main`, `extra`, `gpu`, `ml`).
+2) Each `node_groups` map key becomes one launch template and one node group (`eks-<key>lt` / `eks-<key>node`). Omit a key to skip that group. Optional `taints` list applies EKS taints (e.g. GPU `nvidia.com/gpu=true:NoSchedule`). NVIDIA AMI types skip burstable `credit_specification`. Optional `iam_role`: omit to use the module node role, set an ARN to use that role, set `""` or `null` for no role. Optional `hop_limit` sets IMDS `http_put_response_hop_limit` (defaults to `2` if omitted). Optional `imds_http_tokens` sets IMDS `http_tokens`: `"required"` enforces IMDSv2 only, `"optional"` allows IMDSv1 too (defaults to `"optional"` if omitted, so existing node groups are unchanged). Use DNS-safe keys (`main`, `extra`, `gpu`, `ml`).
 3) Works better with magicorn-aws-kms module. Set `efs_drives = {}` to skip EFS, the CSI add-on, and StorageClass files. Each map key becomes one file system and one StorageClass (`efs-<key>`) in `_deployables/5_efs_storageclass.yaml`. Use DNS-safe keys (`shared`, `mlflow`).

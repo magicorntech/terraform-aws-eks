@@ -23,7 +23,7 @@ resource "aws_launch_template" "main" {
 
   metadata_options {
     http_endpoint               = "enabled"
-    http_tokens                 = "optional"
+    http_tokens                 = lookup(each.value, "imds_http_tokens", "optional")
     instance_metadata_tags      = "enabled"
     http_protocol_ipv6          = "disabled"
     http_put_response_hop_limit = lookup(each.value, "hop_limit", 2)
@@ -49,5 +49,12 @@ resource "aws_launch_template" "main" {
     Environment = var.environment
     Maintainer  = "Magicorn"
     Terraform   = "yes"
+  }
+
+  lifecycle {
+    precondition {
+      condition     = contains(["required", "optional"], lookup(each.value, "imds_http_tokens", "optional"))
+      error_message = "node_groups.${each.key}.imds_http_tokens sadece \"required\" veya \"optional\" olabilir."
+    }
   }
 }
